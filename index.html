@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=640">
+
+    <link rel="stylesheet" href="stylesheets/core.css" media="screen">
+    <link rel="stylesheet" href="stylesheets/mobile.css" media="handheld, only screen and (max-device-width:640px)">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+
+    <script type="text/javascript" src="javascripts/modernizr.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="javascripts/headsmart.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $('#main_content').headsmart()
+      })
+    </script>
+    <title>Githooks by huangsam</title>
+  </head>
+
+  <body>
+    <a id="forkme_banner" href="https://github.com/huangsam/githooks">View on GitHub</a>
+    <div class="shell">
+
+      <header>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <h1>Githooks</h1>
+            <h2>Git hooks for both open-source and work-related projects</h2>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+      </header>
+
+      <section id="downloads">
+        <span class="inner">
+          <a href="https://github.com/huangsam/githooks/zipball/master" class="zip"><em>download</em> .ZIP</a><a href="https://github.com/huangsam/githooks/tarball/master" class="tgz"><em>download</em> .TGZ</a>
+        </span>
+      </section>
+
+
+      <span class="banner-fix"></span>
+
+
+      <section id="main_content">
+        <h1>
+<a name="introduction" class="anchor" href="#introduction"><span class="octicon octicon-link"></span></a>Introduction</h1>
+
+<p>These hooks are the culmination of policies that I typically
+enforce for Python projects. Some of these hooks utilize
+<a href="https://pypi.python.org/pypi/flake8">flake8</a> to ensure PEP8
+compliance, logical flow and an appropriate level of complexity.
+Other hooks utilize the <code>check-msg</code> script to ensure that
+proposed commit messages are formatted correctly for
+<a href="https://www.atlassian.com/software/jira">JIRA</a> pull requests.</p>
+
+<h2>
+<a name="design-decisions" class="anchor" href="#design-decisions"><span class="octicon octicon-link"></span></a>Design Decisions</h2>
+
+<p>These Git hooks utilize a mix of Python and Shell. Python offers
+a clean approach to procedural programming while Shell offers
+excellent text processing and file management utilities.</p>
+
+<p>Many of the Git hooks had lines of code that shared common
+verification tasks, which resulted in unnecessary bloat. To counter
+this effect, verification functionality was centralized into
+<code>check-msg</code> and <code>verify</code> to minimize code redundancy and
+maximize hook maintainability.</p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>Run the <code>generate-hooks.sh</code> script to generate the necessary
+hook executables. All executables should now reside in the newly
+created <code>hooks</code> folder. Finally, replace the <code>.git/hooks</code> folder
+within your desired project with the generated <code>hooks</code> folder
+to enable project policies.</p>
+      </section>
+
+      <footer>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <p>this project by <a href="https://github.com/huangsam">huangsam</a> can be found on <a href="https://github.com/huangsam/githooks">GitHub</a></p>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+        <p>Generated with <a href="http://pages.github.com">GitHub Pages</a> using Merlot</p>
+        <span class="octocat"></span>
+      </footer>
+
+    </div>
+
+    
+  </body>
+</html>
