@@ -22,8 +22,14 @@ maximize hook maintainability.
 
 ## Installation
 
-Run the `generate-hooks.sh` script to generate the necessary
-hook executables. All executables should now reside in the newly
-created `hooks` folder. Finally, replace the `.git/hooks` folder
-within your desired project with the generated `hooks` folder
-to enable project policies.
+```bash
+git clone https://github.com/huangsam/githooks.git
+bash githooks/install.sh
+```
+
+After installation is complete all scripts and commit message template
+will be available in your `.git/hooks` directory. If there are any
+files that already exist with the same name, it will be renamed
+to `%NAME%-BAK`. The git will be configured to point to the commit
+message template.
+
