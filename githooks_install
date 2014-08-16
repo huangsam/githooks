@@ -1,6 +1,7 @@
 #!/bin/bash
 
-GITHOOK_DIR='/tmp/githooks'
+BASE_DIR=$(pwd)
+GITHOOK_DIR="${BASE_DIR}/githooks"
 
 if [ -d ${GITHOOK_DIR} ] ; then
     rm -rf ${GITHOOK_DIR}
