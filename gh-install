@@ -33,4 +33,4 @@ bash "${GITHOOK_DIR}/install.sh"
 echo 'Removing githooks directory...'
 rm -rf "${GITHOOK_DIR}"
 rm -f /tmp/master.*
-echo 'Exiting now...'
+echo 'Installation successful. Exiting now...'
