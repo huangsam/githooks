@@ -33,6 +33,11 @@ function verify_flake8() {
 }
 
 function verify_non_master() {
+    git log >& /dev/null
+    if [ $? -ne 0 ] ; then
+        return
+    fi
+
     CURRENT=`git rev-parse --abbrev-ref HEAD`
 
     if [ "${CURRENT}" == 'master' ] ; then
