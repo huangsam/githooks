@@ -3,7 +3,7 @@
 BASE_DIR=$(pwd)
 GITHOOK_DIR="${BASE_DIR}/githooks"
 
-if [ ! -d "${BASE_DIR}/.git"] ; then
+if [ ! -d "${BASE_DIR}/.git" ] ; then
     echo "Not a git repository. Exiting now..."
     exit 21
 fi
