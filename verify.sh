@@ -3,7 +3,7 @@
 function verify_commit() {
     COMMIT_FL=$1
 
-    python ${GIT_DIR}/hooks/check-msg ${COMMIT_FL}
+    python "${GIT_DIR}/hooks/check-msg" "${COMMIT_FL}"
 
     if [ $? -ne 0 ] ; then
         exit 190
@@ -20,9 +20,9 @@ function verify_flake8() {
 
     BAD=0
 
-    for pyfl in `git diff --cached --name-only --diff-filter=ACMR \
-        | egrep '.py$'` ; do
-        flake8 --show-source ${pyfl}
+    for pyfl in $(git diff --cached --name-only --diff-filter=ACMR \
+        | egrep '.py$') ; do
+        flake8 --show-source "${pyfl}"
         let "BAD|=$?"
     done
 
@@ -38,7 +38,7 @@ function verify_non_master() {
         return
     fi
 
-    CURRENT=`git rev-parse --abbrev-ref HEAD`
+    CURRENT=$(git rev-parse --abbrev-ref HEAD)
 
     if [ "${CURRENT}" == 'master' ] ; then
         echo '[POLICY] Never commit directly to master'
@@ -49,7 +49,7 @@ function verify_non_master() {
 function verify_no_conflict() {
     COMMIT_FL=$1
 
-    grep -i 'Conflicts' ${COMMIT_FL} > /dev/null
+    grep -i 'Conflicts' "${COMMIT_FL}" > /dev/null
     if [ $? -eq 0 ] ; then
         echo '[POLICY] Never commit merge conflicts'
         exit 194

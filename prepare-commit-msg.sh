@@ -1,24 +1,30 @@
 #!/bin/bash
 
-source ${GIT_DIR}/hooks/verify
+source "${GIT_DIR}/hooks/verify"
 
-CURRENT=`git rev-parse --abbrev-ref HEAD`
+function replace_tag() {
+    git log >& /dev/null
+    if [ "$?" -ne 0 ] ; then
+        return
+    fi
 
-# utilize branch prefix as commit-tag for message
-
-CBRANCH=`echo ${CURRENT} | awk -F '/' '{print $1}' | tr '[a-z]' '[A-Z]'`
+    # utilize branch prefix as commit-tag for message
+    CURRENT=$(git rev-parse --abbrev-ref HEAD)
+    CBRANCH=$(echo "${CURRENT}" | awk -F '/' '{print $1}' | tr '[:lower:]' '[:upper:]')
+    sed -ie "s/COMMIT-TAG/${CBRANCH}/g" "$1"
+}
 
 # resolve commit, merge, message, squash and template
 
 case ":$2" in
     :commit|:message|:squash)
-        verify_commit $1
-        sed -ie "s/COMMIT-TAG/${CBRANCH}/g" $1 ;;
+        verify_commit "$1"
+        replace_tag "$1" ;;
 
     :merge)
-        verify_no_conflict $1
-        sed -ie "s/COMMIT-TAG/${CBRANCH}/g" $1 ;;
+        verify_no_conflict "$1"
+        replace_tag "$1" ;;
 
     :template)
-        sed -ie "s/COMMIT-TAG/${CBRANCH}/g" $1 ;;
+        replace_tag "$1" ;;
 esac
