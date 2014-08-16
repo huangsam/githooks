@@ -7,15 +7,15 @@ if [ -d ${GITHOOK_DIR} ] ; then
     rm -rf ${GITHOOK_DIR}
 fi
 
-if [ ! -z `which unzip` ] ; then
+if [ ! -z $(which unzip) ] ; then
     echo 'Starting unzip...'
     curl -fssL -o /tmp/master.zip https://github.com/huangsam/githooks/zipball/master
     unzip /tmp/master.zip -d /tmp && mv /tmp/huangsam-githooks* ${GITHOOK_DIR}
-elif [ ! -z `which tar` ] ; then
+elif [ ! -z $(which tar) ] ; then
     echo 'Starting tar...'
     curl -fssL -o /tmp/master.tar.gz https://github.com/huangsam/githooks/tarball/master
     tar -xf /tmp/master.tar.gz -C /tmp && mv /tmp/huangsam-githooks* ${GITHOOK_DIR}
-elif [ ! -z `which git` ] ; then
+elif [ ! -z $(which git) ] ; then
     echo 'Starting git...'
     git clone https://github.com/huangsam/githooks.git ${GITHOOK_DIR}
 else
