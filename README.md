@@ -14,16 +14,15 @@ These Git hooks utilize a mix of Python and Shell. Python offers
 a clean approach to procedural programming while Shell offers
 excellent text processing and file management utilities.
 
-Many of the Git hooks had lines of code that shared common
-verification tasks, which resulted in unnecessary bloat. To counter
-this effect, verification functionality was centralized into
-`check-msg` and `verify` to minimize code redundancy and
-maximize hook maintainability.
+Many of the Git hooks execute the same verification tasks.
+As such, common functionality is centralized into
+`check-msg` and `verify` for maximum code reusability and
+hook maintainability.
 
 ## Installation
 
 ```bash
-curl -fssL http://huangsam.github.io/githooks/gh-install | bash
+curl -fssL huangsam.github.io/githooks/gh-install | bash
 ```
 
 After installation is complete all scripts and commit message template
