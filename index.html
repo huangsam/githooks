@@ -58,7 +58,7 @@ proposed commit messages are formatted correctly for
 <a href="https://www.atlassian.com/software/jira">JIRA</a> pull requests.</p>
 
 <h2>
-<a name="design-decisions" class="anchor" href="#design-decisions"><span class="octicon octicon-link"></span></a>Design Decisions</h2>
+<a name="implementation" class="anchor" href="#implementation"><span class="octicon octicon-link"></span></a>Implementation</h2>
 
 <p>These Git hooks utilize a mix of Python and Shell. Python offers
 a clean approach to procedural programming while Shell offers
@@ -73,11 +73,14 @@ maximize hook maintainability.</p>
 <h2>
 <a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
 
-<p>Run the <code>generate-hooks.sh</code> script to generate the necessary
-hook executables. All executables should now reside in the newly
-created <code>hooks</code> folder. Finally, replace the <code>.git/hooks</code> folder
-within your desired project with the generated <code>hooks</code> folder
-to enable project policies.</p>
+<div class="highlight highlight-bash"><pre>curl -fssL http://huangsam.github.io/githooks/gh-install <span class="p">|</span> bash
+</pre></div>
+
+<p>After installation is complete all scripts and commit message template
+will be available in your <code>.git/hooks</code> directory. If there are any
+files that already exist with the same name, it will be renamed
+to <code>%NAME%-BAK</code>. The git will be configured to point to the commit
+message template.</p>
       </section>
 
       <footer>
