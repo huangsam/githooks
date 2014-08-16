@@ -5,11 +5,10 @@ SCRIPT_DIR="${BASE_DIR}/githooks/"
 GIT_DIR="${BASE_DIR}/.git/hooks"
 
 # install hooks and supporting scripts
-for fl in $(ls "${SCRIPT_DIR}" | egrep '(.py|.sh)$' | egrep -v "$0") ; do
-    
-    if [ "${fl}" == 'install.sh' ]; then
-        continue
-    fi
+for fl in $(find . -type f -depth 1 \
+    | egrep '(.py|.sh)$' \
+    | egrep -v "$0" \
+    | xargs basename) ; do
 
     tmp_fl=${fl%.py}
     new_fl=${tmp_fl%.sh}
