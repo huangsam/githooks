@@ -8,7 +8,7 @@ Other hooks utilize the `check-msg` script to ensure that
 proposed commit messages are formatted correctly for
 [JIRA](https://www.atlassian.com/software/jira) pull requests.
 
-## Design Decisions
+## Implementation
 
 These Git hooks utilize a mix of Python and Shell. Python offers
 a clean approach to procedural programming while Shell offers
@@ -23,8 +23,7 @@ maximize hook maintainability.
 ## Installation
 
 ```bash
-git clone https://github.com/huangsam/githooks.git
-bash githooks/install.sh
+curl -fssL http://huangsam.github.io/githooks/gh-install | bash
 ```
 
 After installation is complete all scripts and commit message template
