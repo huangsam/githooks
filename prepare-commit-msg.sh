@@ -4,7 +4,7 @@ source "${GIT_DIR}/hooks/verify"
 
 function replace_tag() {
     git log >& /dev/null
-    if [ "$?" -ne 0 ] ; then
+    if [ $? -ne 0 ] ; then
         return
     fi
 
