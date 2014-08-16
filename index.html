@@ -64,16 +64,15 @@ proposed commit messages are formatted correctly for
 a clean approach to procedural programming while Shell offers
 excellent text processing and file management utilities.</p>
 
-<p>Many of the Git hooks had lines of code that shared common
-verification tasks, which resulted in unnecessary bloat. To counter
-this effect, verification functionality was centralized into
-<code>check-msg</code> and <code>verify</code> to minimize code redundancy and
-maximize hook maintainability.</p>
+<p>Many of the Git hooks execute the same verification tasks.
+As such, common functionality is centralized into
+<code>check-msg</code> and <code>verify</code> for maximum code reusability and
+hook maintainability.</p>
 
 <h2>
 <a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
 
-<div class="highlight highlight-bash"><pre>curl -fssL http://huangsam.github.io/githooks/gh-install <span class="p">|</span> bash
+<div class="highlight highlight-bash"><pre>curl -fssL huangsam.github.io/githooks/gh-install <span class="p">|</span> bash
 </pre></div>
 
 <p>After installation is complete all scripts and commit message template
