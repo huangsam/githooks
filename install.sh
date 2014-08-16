@@ -7,10 +7,9 @@ GIT_DIR="${BASE_DIR}/.git/hooks"
 FL_NAME=$(basename "$0")
 
 # install hooks and supporting scripts
-for fl in $(find "${SCRIPT_DIR}" -maxdepth 1 -type f \
+for fl in $(find "${SCRIPT_DIR}" -maxdepth 1 -type f -printf '%f\n' \
     | egrep '(.py|.sh)$' \
-    | egrep -v "$FL_NAME" \
-    | xargs basename) ; do
+    | egrep -v "$FL_NAME") ; do
 
     tmp_fl=${fl%.py}
     new_fl=${tmp_fl%.sh}
