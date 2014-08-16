@@ -33,10 +33,7 @@ function verify_flake8() {
 }
 
 function verify_non_master() {
-    git log >& /dev/null
-    if [ $? -ne 0 ] ; then
-        return
-    fi
+    git log >& /dev/null || exit 0
 
     CURRENT=$(git rev-parse --abbrev-ref HEAD)
 

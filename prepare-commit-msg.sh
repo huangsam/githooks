@@ -3,24 +3,20 @@
 source "${GIT_DIR}/hooks/verify"
 
 function replace_tag() {
-    git log >& /dev/null
-    if [ $? -ne 0 ] ; then
-        return
-    fi
+    git log >& /dev/null || return
 
     # utilize branch prefix as commit-tag for message
     CURRENT=$(git rev-parse --abbrev-ref HEAD)
-    CBRANCH=$(echo "${CURRENT}" | awk -F '/' '{print $1}' | tr '[:lower:]' '[:upper:]')
+    CBRANCH=$(echo "${CURRENT}" \
+        | awk -F '/' '{print $1}' \
+        | tr '[:lower:]' '[:upper:]')
     sed -ie "s/COMMIT-TAG/${CBRANCH}/g" "$1"
 }
 
-verify_non_master
-
-# resolve commit, merge, message, squash and template
+# resolve merge, message and template
 
 case ":$2" in
-    :commit|:message|:squash)
-        verify_commit "$1"
+    :message)
         replace_tag "$1" ;;
 
     :merge)
