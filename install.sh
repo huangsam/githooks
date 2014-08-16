@@ -4,10 +4,12 @@ BASE_DIR=$(pwd)
 SCRIPT_DIR="${BASE_DIR}/githooks/"
 GIT_DIR="${BASE_DIR}/.git/hooks"
 
+FL_NAME=$(basename "$0")
+
 # install hooks and supporting scripts
-for fl in $(find . -type f -depth 1 \
+for fl in $(find "${SCRIPT_DIR}" -type f -depth 1 \
     | egrep '(.py|.sh)$' \
-    | egrep -v "$0" \
+    | egrep -v "$FL_NAME" \
     | xargs basename) ; do
 
     tmp_fl=${fl%.py}
