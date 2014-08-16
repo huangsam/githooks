@@ -14,6 +14,8 @@ function replace_tag() {
     sed -ie "s/COMMIT-TAG/${CBRANCH}/g" "$1"
 }
 
+verify_non_master
+
 # resolve commit, merge, message, squash and template
 
 case ":$2" in
