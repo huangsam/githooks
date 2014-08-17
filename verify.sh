@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function verify_commit() {
+verify_commit() {
     COMMIT_FL=$1
 
     python "${GIT_DIR}/hooks/check-msg" "${COMMIT_FL}"
@@ -10,7 +10,7 @@ function verify_commit() {
     fi
 }
 
-function verify_flake8() {
+verify_flake8() {
     which flake8 &> /dev/null
 
     if [ $? -ne 0 ] ; then
@@ -32,7 +32,7 @@ function verify_flake8() {
     fi
 }
 
-function verify_non_master() {
+verify_non_master() {
     git log >& /dev/null || exit 0
 
     CURRENT=$(git rev-parse --abbrev-ref HEAD)
@@ -43,7 +43,7 @@ function verify_non_master() {
     fi
 }
 
-function verify_no_conflict() {
+verify_no_conflict() {
     COMMIT_FL=$1
 
     grep -i 'Conflicts' "${COMMIT_FL}" > /dev/null

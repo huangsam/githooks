@@ -2,7 +2,7 @@
 
 source "${GIT_DIR}/hooks/verify"
 
-function replace_tag() {
+replace_tag() {
     git log >& /dev/null || return
 
     # utilize branch prefix as commit-tag for message
