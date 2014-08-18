@@ -1,10 +1,40 @@
 #!/usr/bin/env python
 
 from __future__ import print_function
+import io
 import sys
 
 MAX_SLEN = 52
 MAX_OLEN = 72
+
+LABEL_TO_TAG = {
+    'Closes-Bug': set(['[BUGFIX]']),
+    'DocImpact': set(['[SECURITY]', '[TASK]']),
+    'Implements': set(['[FEATURE]']),
+    'Partial-Bug': set(['[BUGFIX]']),
+    'Related-Bug': set(['[BUGFIX]', '[FEATURE]']),
+    'SecurityImpact': set(['[SECURITY]']),
+    'UpgradeImpact': set(),
+}
+
+for key in LABEL_TO_TAG.keys():
+    LABEL_TO_TAG[key].add('[API]')
+    LABEL_TO_TAG[key].add('[CONF]')
+    LABEL_TO_TAG[key].add('[DB]')
+
+
+def good_labels(subject_tags, labels):
+    label_tags = set()
+
+    for label in labels:
+        label_tags.update(LABEL_TO_TAG[label])
+
+    if subject_tags.issubset(label_tags):
+        return True
+    elif '[TASK]' in subject_tags and len(label_tags) == 0:
+        return True
+    else:
+        return False
 
 
 def analyze_tags(line):
@@ -45,8 +75,7 @@ def verify_subject_length(subject_line):
         exit(1)
 
 
-def verify_subject_tags(subject_line):
-    invalid_tags, required_tags, _ = analyze_tags(subject_line)
+def verify_subject_tags(invalid_tags, required_tags):
     num_invalid = len(invalid_tags)
     num_require = len(required_tags)
 
@@ -72,40 +101,42 @@ def verify_other_lengths(other_lines):
         exit(5)
 
 
-def verify_metadata(last_line):
-    try:
-        metadata_label, _ = last_line.split(':')
+def verify_metadata(valid_tags, last_lines):
+    subject_tags = set(valid_tags)
+    subject_tags.discard('[!!!]')
 
-        if metadata_label not in ('Closes-Bug',
-                                  'Partial-Bug',
-                                  'Related-Bug',
-                                  'Implements',
-                                  'UpgradeImpact',
-                                  'SecurityImpact',
-                                  'DocImpact'):
-            warning('Invalid metadata label: %s' % metadata_label)
-            exit(6)
-    except ValueError:
-        warning('Corresponding metadata label is missing')
+    if '[TASK]' not in subject_tags and len(last_lines) == 0:
+        warning('Required metadata tags')
+        exit(6)
+
+    labels = map(lambda l: l.split(':')[0], last_lines)
+
+    if good_labels(subject_tags, labels) is False:
+        warning('Invalid metadata label(s)')
         exit(7)
 
 
 def main():
+
     commit_flname = sys.argv[1]
-    commit_fl = open(commit_flname)
 
-    try:
-        subject_line = commit_fl.readline()
-        other_lines = commit_fl.readlines()
-        last_line = other_lines[-1]
-    except IndexError:
-        warning('One-liners are unacceptable')
-        exit(8)
+    with io.open(commit_flname) as fl:
+        commit_fl = fl.read().splitlines()
+        subject_line = commit_fl.pop(0)
+        i_tags, r_tags, s_tags = analyze_tags(subject_line)
 
-    verify_subject_length(subject_line)
-    verify_subject_tags(subject_line)
-    verify_other_lengths(other_lines)
-    verify_metadata(last_line)
+        last_lines = filter(
+            lambda l: len(l.split(':')) == 2, commit_fl)
+
+        valid_tags = r_tags + s_tags
+
+        verify_subject_length(subject_line)
+        verify_subject_tags(i_tags, r_tags)
+
+        if len(commit_fl) > 1:
+            verify_other_lengths(commit_fl)
+
+        verify_metadata(valid_tags, last_lines)
 
 if __name__ == '__main__':
     main()
