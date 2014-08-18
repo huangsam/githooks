@@ -93,6 +93,7 @@ def verify_subject_tags(invalid_tags, required_tags):
 
 
 def verify_other_lengths(other_lines):
+    # aggregate line_exceed results together
     other_violation = reduce(lambda x, y: x | y,
                              map(line_exceeds, other_lines))
 
@@ -109,6 +110,7 @@ def verify_metadata(valid_tags, last_lines):
         warning('Required metadata tags')
         exit(6)
 
+    # collect all metadata labels
     labels = map(lambda l: l.split(':')[0], last_lines)
 
     if good_labels(subject_tags, labels) is False:
@@ -122,21 +124,23 @@ def main():
 
     with io.open(commit_flname) as fl:
         commit_fl = fl.read().splitlines()
-        subject_line = commit_fl.pop(0)
-        i_tags, r_tags, s_tags = analyze_tags(subject_line)
 
-        last_lines = filter(
-            lambda l: len(l.split(':')) == 2, commit_fl)
+    subject_line = commit_fl.pop(0)
+    i_tags, r_tags, s_tags = analyze_tags(subject_line)
 
-        valid_tags = r_tags + s_tags
+    # filter lines with metadata labels
+    last_lines = filter(
+        lambda l: len(l.split(':')) == 2, commit_fl)
 
-        verify_subject_length(subject_line)
-        verify_subject_tags(i_tags, r_tags)
+    valid_tags = r_tags + s_tags
 
-        if len(commit_fl) > 1:
-            verify_other_lengths(commit_fl)
+    verify_subject_length(subject_line)
+    verify_subject_tags(i_tags, r_tags)
 
-        verify_metadata(valid_tags, last_lines)
+    if len(commit_fl) > 1:
+        verify_other_lengths(commit_fl)
+
+    verify_metadata(valid_tags, last_lines)
 
 if __name__ == '__main__':
     main()
