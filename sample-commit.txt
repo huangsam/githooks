@@ -1,0 +1,7 @@
+[BUGFIX] Fix Add Load button
+
+One of the AJAX calls to the REST API is incorrect because the URL
+is malformed. I am changing it from _________ to _________, so
+the button onClick works.
+
+Closes-Bug: #11

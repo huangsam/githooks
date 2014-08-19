@@ -27,7 +27,12 @@ def good_labels(subject_tags, labels):
     label_tags = set()
 
     for label in labels:
-        label_tags.update(LABEL_TO_TAG[label])
+        tags = LABEL_TO_TAG.get(label)
+
+        if tags is None:
+            return False
+
+        label_tags.update(tags)
 
     if subject_tags.issubset(label_tags):
         return True
@@ -93,7 +98,7 @@ def verify_subject_tags(invalid_tags, required_tags):
 
 
 def verify_other_lengths(other_lines):
-    # aggregate line_exceed results together
+    # aggregate line_exceed results
     other_violation = reduce(lambda x, y: x | y,
                              map(line_exceeds, other_lines))
 
@@ -110,7 +115,7 @@ def verify_metadata(valid_tags, last_lines):
         warning('Required metadata tags')
         exit(6)
 
-    # collect all metadata labels
+    # collect metadata labels
     labels = map(lambda l: l.split(':')[0], last_lines)
 
     if good_labels(subject_tags, labels) is False:
@@ -125,10 +130,14 @@ def main():
     with io.open(commit_flname) as fl:
         commit_fl = fl.read().splitlines()
 
+        # ignore comments
+        commit_fl = filter(
+            lambda l: not l.startswith('#'), commit_fl)
+
     subject_line = commit_fl.pop(0)
     i_tags, r_tags, s_tags = analyze_tags(subject_line)
 
-    # filter lines with metadata labels
+    # select metadata lines
     last_lines = filter(
         lambda l: len(l.split(':')) == 2, commit_fl)
 
