@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BASE_DIR=$(pwd)
+BASE_DIR=$(git rev-parse --show-toplevel)
 SCRIPT_DIR="${BASE_DIR}/githooks/"
 GIT_DIR="${BASE_DIR}/.git/hooks"
 
