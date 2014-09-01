@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BASE_DIR=$(git rev-parse --show-toplevel)
+BASE_DIR=$(git rev-parse --show-toplevel 2> /dev/null)
 
 if [ $? -ne 0 ] ; then
     echo "Not a git repository. Exiting now..."
