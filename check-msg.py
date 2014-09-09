@@ -140,11 +140,6 @@ def main():
 
     subject_line = commit_fl.pop(0)
     i_tags, r_tags, s_tags = analyze_tags(subject_line)
-
-    # select metadata lines
-    last_lines = filter(
-        lambda l: len(l.split(':')) == 2, commit_fl)
-
     valid_tags = r_tags + s_tags
 
     verify_subject_length(subject_line)
@@ -152,6 +147,10 @@ def main():
 
     if len(commit_fl) > 1:
         verify_other_lengths(commit_fl)
+
+    # select metadata lines
+    last_lines = filter(
+        lambda l: len(l.split(':')) == 2, commit_fl)
 
     verify_metadata(valid_tags, last_lines)
 
