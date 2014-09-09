@@ -130,9 +130,13 @@ def main():
     with io.open(commit_flname) as fl:
         commit_fl = fl.read().splitlines()
 
-        # ignore comments
-        commit_fl = filter(
-            lambda l: not l.startswith('#'), commit_fl)
+    # ignore comments
+    commit_fl = filter(
+        lambda l: not l.startswith('#'), commit_fl)
+
+    if len(commit_fl) == 0:
+        warning('Empty commit message')
+        exit(8)
 
     subject_line = commit_fl.pop(0)
     i_tags, r_tags, s_tags = analyze_tags(subject_line)
