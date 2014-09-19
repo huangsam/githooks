@@ -10,7 +10,7 @@ MAX_OLEN = 72
 LABEL_TO_TAG = {
     'Closes-Bug': set(['[BUGFIX]']),
     'DocImpact': set(['[SECURITY]', '[TASK]']),
-    'Implements': set(['[FEATURE]']),
+    'Implements': set(['[FEATURE]', '[TASK]']),
     'Partial-Bug': set(['[BUGFIX]']),
     'Related-Bug': set(['[BUGFIX]', '[FEATURE]']),
     'SecurityImpact': set(['[SECURITY]']),
