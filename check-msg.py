@@ -27,6 +27,11 @@ def good_labels(subject_tags, labels):
     label_tags = set()
 
     for label in labels:
+        # short-circuit for special case
+        if label.startswith('fixes #') or \
+                label.startswith('Fixes #'):
+            return True
+
         tags = LABEL_TO_TAG.get(label)
 
         if tags is None:
@@ -72,6 +77,12 @@ def line_exceeds(line, max_len=MAX_OLEN):
 
 def warning(str):
     print('[POLICY]', str, file=sys.stderr)
+
+
+def valid_metadata(val):
+    return len(val.split(':')) == 2 or \
+        val.startswith('fixes #') or \
+        val.startswith('Fixes #')
 
 
 def verify_subject_length(subject_line):
@@ -124,7 +135,6 @@ def verify_metadata(valid_tags, last_lines):
 
 
 def main():
-
     commit_flname = sys.argv[1]
 
     with io.open(commit_flname) as fl:
@@ -139,18 +149,17 @@ def main():
         exit(8)
 
     subject_line = commit_fl.pop(0)
-    i_tags, r_tags, s_tags = analyze_tags(subject_line)
-    valid_tags = r_tags + s_tags
+    inv_tags, req_tags, sup_tags = analyze_tags(subject_line)
+    valid_tags = req_tags + sup_tags
 
     verify_subject_length(subject_line)
-    verify_subject_tags(i_tags, r_tags)
+    verify_subject_tags(inv_tags, req_tags)
 
     if len(commit_fl) > 1:
         verify_other_lengths(commit_fl)
 
     # select metadata lines
-    last_lines = filter(
-        lambda l: len(l.split(':')) == 2, commit_fl)
+    last_lines = filter(valid_metadata, commit_fl)
 
     verify_metadata(valid_tags, last_lines)
 
