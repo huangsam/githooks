@@ -60,7 +60,6 @@ def analyze_tags(line):
     invalid_tags = []
     required_tags = []
     supplemental_tags = []
-
     subject_words = line.split()
 
     for word in subject_words:
@@ -93,15 +92,6 @@ def line_exceeds(line, max_len=MAX_OLEN):
     return True if len(line) > max_len else False
 
 
-def warning(str):
-    """Print out warning message.
-
-    Args:
-        str (str): Prints out string with [POLICY]
-    """
-    print('[POLICY]', str, file=sys.stderr)
-
-
 def valid_metadata(val):
     """Check if metadata is valid.
 
@@ -122,9 +112,7 @@ def verify_subject_length(subject_line):
     Args:
         subject_line (str): Subject line.
     """
-    if line_exceeds(subject_line, MAX_SLEN):
-        warning('Subject line too long (MAX %i chars)' % MAX_SLEN)
-        exit(1)
+    assert not line_exceeds(subject_line, MAX_SLEN), 'Subject line too long'
 
 
 def verify_subject_tags(invalid_tags, required_tags):
@@ -136,18 +124,8 @@ def verify_subject_tags(invalid_tags, required_tags):
     """
     num_invalid = len(invalid_tags)
     num_require = len(required_tags)
-
-    if num_invalid > 0:
-        invalid_str = ', '.join(invalid_tags)
-        warning('Invalid tag(s): %s' % invalid_str)
-        exit(2)
-
-    if num_require == 0:
-        warning('Required commit tag is missing')
-        exit(3)
-    elif num_require > 1:
-        warning('Provide just one required tag')
-        exit(4)
+    assert num_invalid == 0, 'Invalid tag(s) found: {}'.format(invalid_tags)
+    assert num_require == 1, 'Must write only one commit tag'
 
 
 def verify_other_lengths(other_lines):
@@ -160,9 +138,7 @@ def verify_other_lengths(other_lines):
     for line in other_lines:
         if line_exceeds(line):
             other_violation = True
-    if other_violation is True:
-        warning('Other lines too long (MAX %i chars)' % MAX_OLEN)
-        exit(5)
+    assert not other_violation, 'Other lines are too long'
 
 
 def verify_metadata(valid_tags, last_lines):
@@ -175,16 +151,12 @@ def verify_metadata(valid_tags, last_lines):
     subject_tags = set(valid_tags)
     subject_tags.discard('[!!!]')
 
-    if '[TASK]' not in subject_tags and len(last_lines) == 0:
-        warning('Required metadata tags')
-        exit(6)
+    if '[TASK]' not in subject_tags:
+        assert len(last_lines) > 0, 'Required metadata tags'
 
-    # collect metadata labels
+    # Collect metadata labels
     labels = map(lambda l: l.split(':')[0], last_lines)
-
-    if good_labels(subject_tags, labels) is False:
-        warning('Invalid metadata label(s)')
-        exit(7)
+    assert good_labels(subject_tags, labels), 'Invalid metadata label(s)'
 
 
 def main():
@@ -194,10 +166,7 @@ def main():
         for line in fl.readlines():
             if not line.startswith('#'):
                 commit_fl.append(line)
-
-    if len(commit_fl) == 0:
-        warning('Empty commit message')
-        exit(8)
+    assert len(commit_fl) > 0, 'Empty commit message'
 
     subject_line = commit_fl.pop(0)
     inv_tags, req_tags, sup_tags = analyze_tags(subject_line)
