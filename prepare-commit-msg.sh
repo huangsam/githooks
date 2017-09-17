@@ -13,7 +13,7 @@ replace_tag() {
     sed -ie "s/COMMIT-TAG/${CBRANCH}/g" "$1"
 }
 
-# resolve merge, message and template
+# Resolve merge, message and template
 
 case ":$2" in
     :message)
