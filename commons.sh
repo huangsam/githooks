@@ -21,7 +21,7 @@ verify_flake8() {
     BAD=0
 
     for pyfl in $(git diff --cached --name-only --diff-filter=ACMR \
-        | egrep '.py$') ; do
+        | grep -E '.py$') ; do
         flake8 --show-source "${pyfl}"
         let "BAD|=$?"
     done

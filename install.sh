@@ -8,8 +8,8 @@ FL_NAME=$(basename "$0")
 
 # Install hooks and supporting scripts
 for fl in $(find "${SCRIPT_DIR}" -maxdepth 1 -type f \
-    | egrep '(.py|.sh)$' \
-    | egrep -v "$FL_NAME" \
+    | grep -E '(.py|.sh)$' \
+    | grep -E -v "$FL_NAME" \
     | xargs -n1 basename) ; do
 
     tmp_fl=${fl%.py}
