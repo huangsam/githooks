@@ -1,6 +1,6 @@
 # Introduction
 
-These hooks are the culmination of policies that I enforce for Python projects. Some of these hooks utilize [flake8](https://pypi.python.org/pypi/flake8) to ensure PEP8 compliance, logical flow and an appropriate level of complexity. Other hooks utilize the `check_msg` script to ensure that proposed commit messages are formatted correctly for [JIRA](https://www.atlassian.com/software/jira) pull requests.
+These hooks are a collection of policies that I enforced for Python projects at Cisco. `check_msg` uses [flake8](https://pypi.python.org/pypi/flake8) to ensure PEP8 compliance, logical flow and complexity bounds. Some hooks use the script to ensure that the proposed commit messages are formatted correctly for [JIRA](https://www.atlassian.com/software/jira) pull requests.
 
 ## Implementation
 
