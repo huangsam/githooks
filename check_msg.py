@@ -156,10 +156,10 @@ def verify_other_lengths(other_lines):
     Args:
         other_lines (list): Other lines that exist.
     """
-    # aggregate line_exceed results
-    other_violation = reduce(lambda x, y: x | y,
-                             map(line_exceeds, other_lines))
-
+    other_violation = False
+    for line in other_lines:
+        if line_exceeds(line):
+            other_violation = True
     if other_violation is True:
         warning('Other lines too long (MAX %i chars)' % MAX_OLEN)
         exit(5)
@@ -189,13 +189,11 @@ def verify_metadata(valid_tags, last_lines):
 
 def main():
     commit_flname = sys.argv[1]
-
+    commit_fl = []
     with io.open(commit_flname) as fl:
-        commit_fl = fl.read().splitlines()
-
-    # ignore comments
-    commit_fl = filter(
-        lambda l: not l.startswith('#'), commit_fl)
+        for line in fl.readlines():
+            if not line.startswith('#'):
+                commit_fl.append(line)
 
     if len(commit_fl) == 0:
         warning('Empty commit message')
@@ -211,8 +209,10 @@ def main():
     if len(commit_fl) > 1:
         verify_other_lengths(commit_fl)
 
-    # select metadata lines
-    last_lines = filter(valid_metadata, commit_fl)
+    last_lines = []
+    for line in commit_fl:
+        if valid_metadata(line):
+            last_lines.append(line)
 
     verify_metadata(valid_tags, last_lines)
 
