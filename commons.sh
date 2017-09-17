@@ -3,7 +3,7 @@
 verify_commit() {
     COMMIT_FL=$1
 
-    python "${GIT_DIR}/hooks/check-msg" "${COMMIT_FL}"
+    python "${GIT_DIR}/hooks/check_msg" "${COMMIT_FL}"
 
     if [ $? -ne 0 ] ; then
         exit 190

@@ -1,12 +1,12 @@
 # Introduction
 
-These hooks are the culmination of policies that I enforce for Python projects. Some of these hooks utilize [flake8](https://pypi.python.org/pypi/flake8) to ensure PEP8 compliance, logical flow and an appropriate level of complexity. Other hooks utilize the `check-msg` script to ensure that proposed commit messages are formatted correctly for [JIRA](https://www.atlassian.com/software/jira) pull requests.
+These hooks are the culmination of policies that I enforce for Python projects. Some of these hooks utilize [flake8](https://pypi.python.org/pypi/flake8) to ensure PEP8 compliance, logical flow and an appropriate level of complexity. Other hooks utilize the `check_msg` script to ensure that proposed commit messages are formatted correctly for [JIRA](https://www.atlassian.com/software/jira) pull requests.
 
 ## Implementation
 
 These Git hooks utilize a mix of Python and Shell. Python offers a clean approach to procedural programming while Shell offers excellent text processing and file management utilities.
 
-Many of the Git hooks execute the same verification tasks. As such, common functionality is centralized into `check-msg` and `commons` for maximum code reusability and hook maintainability.
+Many of the Git hooks execute the same verification tasks. As such, common functionality is centralized into `check_msg` and `commons` for maximum code reusability and hook maintainability.
 
 ## Installation
 
