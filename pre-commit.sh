@@ -1,5 +1,5 @@
 #!/bin/bash
 
-source "${GIT_DIR}/hooks/verify"
+source "${GIT_DIR}/hooks/commons"
 
 verify_flake8

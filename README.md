@@ -6,7 +6,7 @@ These hooks are the culmination of policies that I enforce for Python projects. 
 
 These Git hooks utilize a mix of Python and Shell. Python offers a clean approach to procedural programming while Shell offers excellent text processing and file management utilities.
 
-Many of the Git hooks execute the same verification tasks. As such, common functionality is centralized into `check-msg` and `verify` for maximum code reusability and hook maintainability.
+Many of the Git hooks execute the same verification tasks. As such, common functionality is centralized into `check-msg` and `commons` for maximum code reusability and hook maintainability.
 
 ## Installation
 

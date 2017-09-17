@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-from __future__ import print_function
 import io
 import sys
+
 
 MAX_SLEN = 52
 MAX_OLEN = 72
@@ -24,21 +24,22 @@ for key in LABEL_TO_TAG.keys():
 
 
 def good_labels(subject_tags, labels):
-    label_tags = set()
+    """Checks if labels are good.
 
+    Args:
+        subject_tags (list): Subject tags.
+        labels (list): Labels.
+    """
+    label_tags = set()
     for label in labels:
-        # short-circuit for special case
+        # Short-circuit for special case
         if label.startswith('fixes #') or \
                 label.startswith('Fixes #'):
             return True
-
         tags = LABEL_TO_TAG.get(label)
-
         if tags is None:
             return False
-
         label_tags.update(tags)
-
     if subject_tags.issubset(label_tags):
         return True
     elif '[TASK]' in subject_tags and len(label_tags) == 0:
@@ -48,6 +49,14 @@ def good_labels(subject_tags, labels):
 
 
 def analyze_tags(line):
+    """Analyze tags.
+
+    Args:
+        line (str): Collection of words.
+
+    Returns:
+        tuple: Invalid, required and supplemental tags.
+    """
     invalid_tags = []
     required_tags = []
     supplemental_tags = []
@@ -72,26 +81,59 @@ def analyze_tags(line):
 
 
 def line_exceeds(line, max_len=MAX_OLEN):
+    """Check if line exceeds specified length.
+
+    Args:
+        line (str): Collection of words.
+        max_len (int): Maximum length enforced.
+
+    Returns:
+        bool: Flag for exceeding max length
+    """
     return True if len(line) > max_len else False
 
 
 def warning(str):
+    """Print out warning message.
+
+    Args:
+        str (str): Prints out string with [POLICY]
+    """
     print('[POLICY]', str, file=sys.stderr)
 
 
 def valid_metadata(val):
+    """Check if metadata is valid.
+
+    Args:
+        val (str): Textual content.
+
+    Returns:
+        bool: Flag for valid metadata.
+    """
     return len(val.split(':')) == 2 or \
         val.startswith('fixes #') or \
         val.startswith('Fixes #')
 
 
 def verify_subject_length(subject_line):
+    """Check if subject length is long.
+
+    Args:
+        subject_line (str): Subject line.
+    """
     if line_exceeds(subject_line, MAX_SLEN):
         warning('Subject line too long (MAX %i chars)' % MAX_SLEN)
         exit(1)
 
 
 def verify_subject_tags(invalid_tags, required_tags):
+    """Check if subject tags are good.
+
+    Args:
+        invalid_tags (list): Invalid tags.
+        required_tags (list): Required tags.
+    """
     num_invalid = len(invalid_tags)
     num_require = len(required_tags)
 
@@ -109,6 +151,11 @@ def verify_subject_tags(invalid_tags, required_tags):
 
 
 def verify_other_lengths(other_lines):
+    """Check if length is good for other lines.
+
+    Args:
+        other_lines (list): Other lines that exist.
+    """
     # aggregate line_exceed results
     other_violation = reduce(lambda x, y: x | y,
                              map(line_exceeds, other_lines))
@@ -119,6 +166,12 @@ def verify_other_lengths(other_lines):
 
 
 def verify_metadata(valid_tags, last_lines):
+    """Verify metadata.
+
+    Args:
+        valid_tags (list): Valid tags.
+        last_lines (list): Last lines.
+    """
     subject_tags = set(valid_tags)
     subject_tags.discard('[!!!]')
 
@@ -162,6 +215,7 @@ def main():
     last_lines = filter(valid_metadata, commit_fl)
 
     verify_metadata(valid_tags, last_lines)
+
 
 if __name__ == '__main__':
     main()
