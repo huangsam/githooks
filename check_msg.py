@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import argparse
 import sys
 
 
@@ -29,6 +30,25 @@ for label in LABEL_TO_TAG.keys():
 # Special tags
 REQUIRED_TAGS = set(['[BUGFIX]', '[TASK]', '[FEATURE]'])
 OPTIONAL_TAGS = set(['[!!!]', '[API]', '[CONF]', '[DB]', '[SECURITY]'])
+
+
+def parse_args(argv):
+    """Parse command-line arguments.
+
+    Args:
+        argv (list): Command line arguments.
+
+    Returns:
+        argparse.Namespace: Parsed arguments.
+    """
+    parser = argparse.ArgumentParser(
+        description='Check correctness of commit message.',
+        add_help=True)
+    parser.add_argument(
+        'filename',
+        type=str,
+        help='Filename of commit message')
+    return parser.parse_args(argv)
 
 
 def analyze_file(commit_flname):
@@ -162,8 +182,8 @@ def valid_fixes(line):
 
 
 def main():
-    commit_flname = sys.argv[1]
-    commit_buffer = analyze_file(commit_flname)
+    args = parse_args(sys.argv[1:])
+    commit_buffer = analyze_file(args.filename)
     subject_tags = analyze_tags(commit_buffer.pop(0))
     last_lines = analyze_lines(commit_buffer)
     analyze_labels(subject_tags, last_lines)
