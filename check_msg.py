@@ -71,6 +71,7 @@ def analyze_lines(commit_buffer):
                 last_lines.append(line)
     return last_lines
 
+
 def line_exceeds(line, max_len=MAX_OLEN):
     """Check if line exceeds specified length.
 
