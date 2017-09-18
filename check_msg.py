@@ -50,10 +50,10 @@ def analyze_file(commit_flname):
 
 
 def analyze_tags(subject_line):
-    """Analyze tags from subject line.
+    """Analyze subject tags.
 
     Args:
-        line (str): Collection of words.
+        subject_line (str): Subject line contents.
 
     Returns:
         set: Required and optional tags.
@@ -79,10 +79,10 @@ def analyze_tags(subject_line):
 
 
 def analyze_lines(commit_buffer):
-    """Analyze lines.
+    """Analyze non-header lines.
 
     Args:
-        commit_buffer (list): List of lines.
+        commit_buffer (list): List of non-header lines in commit file.
 
     Returns:
         list: Last metadata lines.
@@ -100,11 +100,11 @@ def analyze_lines(commit_buffer):
 
 
 def analyze_labels(subject_tags, last_lines):
-    """Checks if labels are good.
+    """Analyze metadata labels.
 
     Args:
-        subject_tags (list): Subject tags.
-        last_lines (list): Last metadata lines.
+        subject_tags (list): Subject tags from subject line.
+        last_lines (list): Last metadata lines in commit file.
 
     Raises:
         KeyError: Invalid label(s).
