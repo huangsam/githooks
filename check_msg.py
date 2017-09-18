@@ -36,7 +36,7 @@ def analyze_tags(line):
         line (str): Collection of words.
 
     Returns:
-        tuple: Required and optional tags.
+        set: Required and optional tags.
     """
     invalid_tags = []
     required_tags = []
@@ -51,8 +51,25 @@ def analyze_tags(line):
             invalid_tags.append(word)
     assert len(invalid_tags) == 0, 'Invalid tags found'
     assert len(required_tags) == 1, 'Please provide one required tag'
-    return (required_tags, optional_tags)
+    return set(required_tags + optional_tags) - set(['!!!'])
 
+
+def analyze_lines(commit_buffer):
+    """Analyze lines.
+
+    Args:
+        commit_buffer (list): List of lines.
+
+    Returns:
+        list: Last metadata lines.
+    """
+    last_lines = []
+    if len(commit_buffer) > 1:
+        for line in commit_buffer:
+            assert line_exceeds(line) is False, 'Other lines are too long'
+            if valid_metadata(line):
+                last_lines.append(line)
+    return last_lines
 
 def line_exceeds(line, max_len=MAX_OLEN):
     """Check if line exceeds specified length.
@@ -114,16 +131,8 @@ def main():
     subject_line = commit_buffer.pop(0)
     assert not line_exceeds(subject_line, MAX_SLEN), 'Subject line too long'
 
-    required_tags, optional_tags = analyze_tags(subject_line)
-    valid_tags = required_tags + optional_tags
-    subject_tags = set(valid_tags)
-    subject_tags.discard('[!!!]')
-    last_lines = []
-    if len(commit_buffer) > 1:
-        for line in commit_buffer:
-            assert line_exceeds(line) is False, 'Other lines are too long'
-            if valid_metadata(line):
-                last_lines.append(line)
+    subject_tags = analyze_tags(subject_line)
+    last_lines = analyze_lines(commit_buffer)
     if '[TASK]' not in subject_tags:
         assert len(last_lines) > 0, 'Required metadata tags'
     labels = map(lambda line: line.split(':')[0], last_lines)
