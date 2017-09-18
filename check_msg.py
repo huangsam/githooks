@@ -20,11 +20,13 @@ LABEL_TO_TAG = {
     'UpgradeImpact': set(),
 }
 
-for key in LABEL_TO_TAG.keys():
-    LABEL_TO_TAG[key].add('[API]')
-    LABEL_TO_TAG[key].add('[CONF]')
-    LABEL_TO_TAG[key].add('[DB]')
+# Tags that apply to all labels
+for label in LABEL_TO_TAG.keys():
+    LABEL_TO_TAG[label].add('[API]')
+    LABEL_TO_TAG[label].add('[CONF]')
+    LABEL_TO_TAG[label].add('[DB]')
 
+# Special tags
 REQUIRED_TAGS = set(['[BUGFIX]', '[TASK]', '[FEATURE]'])
 OPTIONAL_TAGS = set(['[!!!]', '[API]', '[CONF]', '[DB]', '[SECURITY]'])
 
