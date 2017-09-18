@@ -104,7 +104,7 @@ def analyze_labels(subject_tags, last_lines):
 
     Args:
         subject_tags (list): Subject tags.
-        labels (list): Labels.
+        last_lines (list): Last metadata lines.
 
     Raises:
         KeyError: Invalid label(s).
