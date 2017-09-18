@@ -4,10 +4,10 @@ import sys
 
 
 # Max length of subject line
-MAX_SLEN = 52
+MAX_LEN_SUBJECT = 52
 
 # Max length of other lines
-MAX_OLEN = 72
+MAX_LEN_OTHER = 72
 
 # Label to tag mapping
 LABEL_TO_TAG = {
@@ -61,7 +61,7 @@ def analyze_tags(subject_line):
     Raises:
         AssertionError: Invalid subject line or bad tags.
     """
-    assert valid_line(subject_line, MAX_SLEN), 'Subject line too long'
+    assert valid_len(subject_line, MAX_LEN_SUBJECT), 'Subject line too long'
     subject_words = subject_line.split()
     invalid_tags = []
     required_tags = []
@@ -93,8 +93,8 @@ def analyze_lines(commit_buffer):
     last_lines = []
     if len(commit_buffer) > 1:
         for line in commit_buffer:
-            assert valid_line(line), 'Other lines are too long'
-            if valid_metadata(line):
+            assert valid_len(line, MAX_LEN_OTHER), 'Other lines are too long'
+            if valid_kv(line) or valid_fixes(line):
                 last_lines.append(line)
     return last_lines
 
@@ -115,7 +115,7 @@ def analyze_labels(subject_tags, last_lines):
     labels = map(lambda line: line.split(':')[0], last_lines)
     label_tags = set()
     for label in labels:
-        if label.lower().startswith('fixes #'):
+        if valid_fixes(label):
             return
         tags = LABEL_TO_TAG[label]
         label_tags.update(tags)
@@ -124,29 +124,41 @@ def analyze_labels(subject_tags, last_lines):
     assert valid_labels, 'Label tag(s) are invalid'
 
 
-def valid_line(line, max_len=MAX_OLEN):
-    """Check if line is valid.
+def valid_len(line, max_len):
+    """Check if line length is valid.
 
     Args:
         line (str): Collection of words.
         max_len (int): Maximum length enforced.
 
     Returns:
-        bool: Flag for valid line.
+        bool: Flag for valid line length.
     """
-    return True if len(line) <= max_len else False
+    return len(line) <= max_len
 
 
-def valid_metadata(val):
-    """Check if metadata is valid.
+def valid_kv(line):
+    """Check if line is valid key:value.
 
     Args:
-        val (str): Textual content.
+        line (str): Textual content.
 
     Returns:
-        bool: Flag for valid metadata.
+        bool: Flag for valid key:value.
     """
-    return len(val.split(':')) == 2 or val.lower().startswith('fixes #')
+    return len(line.split(':')) == 2
+
+
+def valid_fixes(line):
+    """Check if line is valid 'fixes' statement.
+
+    Args:
+        line (str): Textual content.
+
+    Returns:
+        bool: Flag for valid 'fixes' statement.
+    """
+    return line.lower().startswith('fixes #')
 
 
 def main():
