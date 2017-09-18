@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 
-import io
 import sys
 
 
+# Max length of subject line
 MAX_SLEN = 52
+
+# Max length of other lines
 MAX_OLEN = 72
 
+# Label to tag mapping
 LABEL_TO_TAG = {
     'Closes-Bug': set(['[BUGFIX]']),
     'DocImpact': set(['[SECURITY]', '[TASK]']),
@@ -22,30 +25,8 @@ for key in LABEL_TO_TAG.keys():
     LABEL_TO_TAG[key].add('[CONF]')
     LABEL_TO_TAG[key].add('[DB]')
 
-
-def good_labels(subject_tags, labels):
-    """Checks if labels are good.
-
-    Args:
-        subject_tags (list): Subject tags.
-        labels (list): Labels.
-    """
-    label_tags = set()
-    for label in labels:
-        # Short-circuit for special case
-        if label.startswith('fixes #') or \
-                label.startswith('Fixes #'):
-            return True
-        tags = LABEL_TO_TAG.get(label)
-        if tags is None:
-            return False
-        label_tags.update(tags)
-    if subject_tags.issubset(label_tags):
-        return True
-    elif '[TASK]' in subject_tags and len(label_tags) == 0:
-        return True
-    else:
-        return False
+REQUIRED_TAGS = set(['[BUGFIX]', '[TASK]', '[FEATURE]'])
+OPTIONAL_TAGS = set(['[!!!]', '[API]', '[CONF]', '[DB]', '[SECURITY]'])
 
 
 def analyze_tags(line):
@@ -55,28 +36,22 @@ def analyze_tags(line):
         line (str): Collection of words.
 
     Returns:
-        tuple: Invalid, required and supplemental tags.
+        tuple: Required and optional tags.
     """
     invalid_tags = []
     required_tags = []
-    supplemental_tags = []
+    optional_tags = []
     subject_words = line.split()
-
     for word in subject_words:
-        if word in ('[BUGFIX]',
-                    '[TASK]',
-                    '[FEATURE]'):
+        if word in REQUIRED_TAGS:
             required_tags.append(word)
-        elif word in ('[!!!]',
-                      '[API]',
-                      '[CONF]',
-                      '[DB]',
-                      '[SECURITY]'):
-            supplemental_tags.append(word)
+        elif word in OPTIONAL_TAGS:
+            optional_tags.append(word)
         elif word.startswith('[') and word.endswith(']'):
             invalid_tags.append(word)
-
-    return (invalid_tags, required_tags, supplemental_tags)
+    assert len(invalid_tags) == 0, 'Invalid tags found'
+    assert len(required_tags) == 1, 'Please provide one required tag'
+    return (required_tags, optional_tags)
 
 
 def line_exceeds(line, max_len=MAX_OLEN):
@@ -101,89 +76,58 @@ def valid_metadata(val):
     Returns:
         bool: Flag for valid metadata.
     """
-    return len(val.split(':')) == 2 or \
-        val.startswith('fixes #') or \
-        val.startswith('Fixes #')
+    return len(val.split(':')) == 2 or val.lower().startswith('fixes #')
 
 
-def verify_subject_length(subject_line):
-    """Check if subject length is long.
+def verify_labels(subject_tags, labels):
+    """Checks if labels are good.
 
     Args:
-        subject_line (str): Subject line.
+        subject_tags (list): Subject tags.
+        labels (list): Labels.
+
+    Raises:
+        AssertionError: From improper labels.
     """
-    assert not line_exceeds(subject_line, MAX_SLEN), 'Subject line too long'
-
-
-def verify_subject_tags(invalid_tags, required_tags):
-    """Check if subject tags are good.
-
-    Args:
-        invalid_tags (list): Invalid tags.
-        required_tags (list): Required tags.
-    """
-    num_invalid = len(invalid_tags)
-    num_require = len(required_tags)
-    assert num_invalid == 0, 'Invalid tag(s) found: {}'.format(invalid_tags)
-    assert num_require == 1, 'Must write only one commit tag'
-
-
-def verify_other_lengths(other_lines):
-    """Check if length is good for other lines.
-
-    Args:
-        other_lines (list): Other lines that exist.
-    """
-    other_violation = False
-    for line in other_lines:
-        if line_exceeds(line):
-            other_violation = True
-    assert not other_violation, 'Other lines are too long'
-
-
-def verify_metadata(valid_tags, last_lines):
-    """Verify metadata.
-
-    Args:
-        valid_tags (list): Valid tags.
-        last_lines (list): Last lines.
-    """
-    subject_tags = set(valid_tags)
-    subject_tags.discard('[!!!]')
-
-    if '[TASK]' not in subject_tags:
-        assert len(last_lines) > 0, 'Required metadata tags'
-
-    # Collect metadata labels
-    labels = map(lambda l: l.split(':')[0], last_lines)
-    assert good_labels(subject_tags, labels), 'Invalid metadata label(s)'
+    label_tags = set()
+    for label in labels:
+        if label.lower().startswith('fixes #'):
+            return
+        tags = LABEL_TO_TAG.get(label)
+        assert tags, 'Invalid metadata label'
+        label_tags.update(tags)
+    valid_labels = subject_tags.issubset(label_tags)
+    valid_labels |= '[TASK]' in subject_tags and len(label_tags) == 0
+    assert valid_labels, 'Label tag(s) are invalid'
 
 
 def main():
     commit_flname = sys.argv[1]
-    commit_fl = []
-    with io.open(commit_flname) as fl:
+    commit_buffer = []
+
+    with open(commit_flname) as fl:
         for line in fl.readlines():
             if not line.startswith('#'):
-                commit_fl.append(line)
-    assert len(commit_fl) > 0, 'Empty commit message'
+                commit_buffer.append(line)
+    assert len(commit_buffer) > 0, 'Empty commit message'
 
-    subject_line = commit_fl.pop(0)
-    inv_tags, req_tags, sup_tags = analyze_tags(subject_line)
-    valid_tags = req_tags + sup_tags
+    subject_line = commit_buffer.pop(0)
+    assert not line_exceeds(subject_line, MAX_SLEN), 'Subject line too long'
 
-    verify_subject_length(subject_line)
-    verify_subject_tags(inv_tags, req_tags)
-
-    if len(commit_fl) > 1:
-        verify_other_lengths(commit_fl)
-
+    required_tags, optional_tags = analyze_tags(subject_line)
+    valid_tags = required_tags + optional_tags
+    subject_tags = set(valid_tags)
+    subject_tags.discard('[!!!]')
     last_lines = []
-    for line in commit_fl:
-        if valid_metadata(line):
-            last_lines.append(line)
-
-    verify_metadata(valid_tags, last_lines)
+    if len(commit_buffer) > 1:
+        for line in commit_buffer:
+            assert line_exceeds(line) is False, 'Other lines are too long'
+            if valid_metadata(line):
+                last_lines.append(line)
+    if '[TASK]' not in subject_tags:
+        assert len(last_lines) > 0, 'Required metadata tags'
+    labels = map(lambda line: line.split(':')[0], last_lines)
+    verify_labels(subject_tags, labels)
 
 
 if __name__ == '__main__':
