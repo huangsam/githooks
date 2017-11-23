@@ -16,15 +16,13 @@ for fl in $(find "${SCRIPT_DIR}" -maxdepth 1 -type f \
     new_fl=${tmp_fl%.sh}
 
     if [ -f "${GIT_DIR}/${new_fl}" ]; then
-        mv "${GIT_DIR}/${new_fl}" "${GIT_DIR}/${new_fl}.bak"
+        mv "${GIT_DIR}/${new_fl}" "${GIT_DIR}/${new_fl}.backup"
     fi
 
     cp "${SCRIPT_DIR}/${fl}" "${GIT_DIR}/${new_fl}"
     chmod 744 "${GIT_DIR}/${new_fl}"
-
 done
 
 # Install commit message template in local config
 cp "${SCRIPT_DIR}/git-commit-template.txt" "${GIT_DIR}/git-commit-template.txt"
 git config --local commit.template "${GIT_DIR}/git-commit-template.txt"
-
