@@ -1,7 +1,8 @@
 #!/usr/bin/env python
-
 import argparse
 import sys
+
+import validation as v
 
 
 # Max length of subject line
@@ -81,7 +82,7 @@ def analyze_tags(subject_line):
     Raises:
         AssertionError: Invalid subject line or bad tags.
     """
-    assert valid_len(subject_line, MAX_LEN_SUBJECT), 'Subject line too long'
+    assert v.valid_len(subject_line, MAX_LEN_SUBJECT), 'Subject line too long'
     subject_words = subject_line.split()
     invalid_tags = []
     required_tags = []
@@ -113,8 +114,8 @@ def analyze_lines(commit_buffer):
     last_lines = []
     if len(commit_buffer) > 1:
         for line in commit_buffer:
-            assert valid_len(line, MAX_LEN_OTHER), 'Other lines are too long'
-            if valid_kv(line) or valid_fixes(line):
+            assert v.valid_len(line, MAX_LEN_OTHER), 'Other lines are too long'
+            if v.valid_kv(line) or v.valid_fixes(line):
                 last_lines.append(line)
     return last_lines
 
@@ -135,50 +136,13 @@ def analyze_labels(subject_tags, last_lines):
     labels = map(lambda line: line.split(':')[0], last_lines)
     label_tags = set()
     for label in labels:
-        if valid_fixes(label):
+        if v.valid_fixes(label):
             return
         tags = LABEL_TO_TAG[label]
         label_tags.update(tags)
     valid_labels = subject_tags.issubset(label_tags)
     valid_labels |= '[TASK]' in subject_tags and len(label_tags) == 0
     assert valid_labels, 'Label tag(s) are invalid'
-
-
-def valid_len(line, max_len):
-    """Check if line length is valid.
-
-    Args:
-        line (str): Collection of words.
-        max_len (int): Maximum length enforced.
-
-    Returns:
-        bool: Flag for valid line length.
-    """
-    return len(line) <= max_len
-
-
-def valid_kv(line):
-    """Check if line is valid key:value.
-
-    Args:
-        line (str): Textual content.
-
-    Returns:
-        bool: Flag for valid key:value.
-    """
-    return len(line.split(':')) == 2
-
-
-def valid_fixes(line):
-    """Check if line is valid 'fixes' statement.
-
-    Args:
-        line (str): Textual content.
-
-    Returns:
-        bool: Flag for valid 'fixes' statement.
-    """
-    return line.lower().startswith('fixes #')
 
 
 def main():
