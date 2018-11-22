@@ -3,8 +3,10 @@
 BASE_DIR=$(git rev-parse --show-toplevel 2> /dev/null)
 
 if [ $? -ne 0 ] ; then
-    echo "Not a git repository. Exiting now..."
+    echo 'Not a git repository. Exiting now...'
     exit 21
+else
+    echo 'Proceeding with git repository.'
 fi
 
 GITHOOK_DIR="${BASE_DIR}/hooksimport"
