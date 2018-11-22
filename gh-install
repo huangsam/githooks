@@ -22,11 +22,13 @@ fi
 if [ ! -z "$(which unzip)" ] ; then
     echo 'Attempting unzip...'
     curl -fssL -o /tmp/master.zip https://github.com/huangsam/githooks/zipball/master
-    unzip -qo /tmp/master.zip -d /tmp && mv /tmp/huangsam-githooks* "$GITHOOK_DIR"
+    unzip -q /tmp/master.zip -d /tmp
+    mv /tmp/huangsam-githooks* "$GITHOOK_DIR"
 elif [ ! -z "$(which tar)" ] ; then
     echo 'Attempting tar...'
     curl -fssL -o /tmp/master.tar.gz https://github.com/huangsam/githooks/tarball/master
-    tar -xf /tmp/master.tar.gz -C /tmp && mv /tmp/huangsam-githooks* "$GITHOOK_DIR"
+    tar -xf /tmp/master.tar.gz -C /tmp
+    mv /tmp/huangsam-githooks* "$GITHOOK_DIR"
 elif [ ! -z "$(which git)" ] ; then
     echo 'Attempting git...'
     git clone -q https://github.com/huangsam/githooks.git "$GITHOOK_DIR"
@@ -40,10 +42,9 @@ rm -rf "$GITHOOK_DIR/.git"
 
 pushd "$GIT_DIR" &> /dev/null
 echo 'Configuring hooks scripts...'
-for fl in $(find "$BUNDLE_DIR" -name '*.py'); do
+find "$BUNDLE_DIR" -name '*.py' -print0 | while read -d $'\0' fl ; do
     chmod +x "$fl"
-    new_fl=${fl%.py}
-    mv "$fl" "$new_fl"
+    mv "$fl" "${fl%.py}"
 done
 echo 'Installing hooks scripts...'
 rm -rf hooks
