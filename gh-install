@@ -7,11 +7,13 @@ if [ $? -ne 0 ] ; then
     exit 21
 fi
 
-GITHOOK_DIR="${BASE_DIR}/githooks"
+GITHOOK_DIR="${BASE_DIR}/hooksimport"
 
 if [ -d "${GITHOOK_DIR}" ] ; then
     rm -rf "${GITHOOK_DIR}"
 fi
+
+rm -rf /tmp/huangsam-githooks*
 
 if [ ! -z "$(which unzip)" ] ; then
     echo 'Starting unzip...'
