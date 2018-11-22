@@ -14,8 +14,8 @@ VERSION = None
 
 # What packages are required for this module to be executed?
 REQUIRED = ['flake8', 'pygit2']
-SETUP_REQUIRED = []
-TEST_REQUIRED = []
+SETUP_REQUIRED = ['pytest-runner']
+TEST_REQUIRED = ['pytest']
 
 # What packages are optional?
 EXTRAS = {}
