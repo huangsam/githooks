@@ -9,7 +9,7 @@ else
     echo 'Proceeding with git repository...'
 fi
 
-GITHOOK_DIR="${BASE_DIR}/hooksimport"
+GITHOOK_DIR="${BASE_DIR}/.githooks"
 
 if [ -d "${GITHOOK_DIR}" ] ; then
     echo "Wiping out old copy of ${GITHOOK_DIR}..."
