@@ -1,4 +1,4 @@
 #!/usr/bin/env python
-from githooks.core.syntax import check_syntax
+from githooks.core.syntax import check_flake8
 
-check_syntax()
+check_flake8()

@@ -2,7 +2,6 @@ import io
 import os
 
 from setuptools import find_packages, setup
-from setuptools.extension import Extension
 
 # Package meta-data.
 NAME = 'githooks'
