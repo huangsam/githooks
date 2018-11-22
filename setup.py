@@ -50,6 +50,7 @@ setup(
     author_email=EMAIL,
     python_requires=REQUIRES_PYTHON,
     url=URL,
+    blah='ha',
     packages=find_packages(),
     install_requires=REQUIRED,
     setup_requires=SETUP_REQUIRED,
