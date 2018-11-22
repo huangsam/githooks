@@ -103,3 +103,4 @@ venv.bak/
 
 # Project specific
 hooks
+.DS_Store

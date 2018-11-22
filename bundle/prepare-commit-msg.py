@@ -2,7 +2,6 @@
 import fileinput
 import sys
 
-from githooks import data_path
 from githooks.core.branch import check_no_conflict
 from githooks.utils.git import get_repo_from_cwd, get_branch_tag
 
