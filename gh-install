@@ -6,12 +6,13 @@ if [ $? -ne 0 ] ; then
     echo 'Not a git repository. Exiting now...'
     exit 21
 else
-    echo 'Proceeding with git repository.'
+    echo 'Proceeding with git repository...'
 fi
 
 GITHOOK_DIR="${BASE_DIR}/hooksimport"
 
 if [ -d "${GITHOOK_DIR}" ] ; then
+    echo "Wiping out old copy of ${GITHOOK_DIR}..."
     rm -rf "${GITHOOK_DIR}"
 fi
 
