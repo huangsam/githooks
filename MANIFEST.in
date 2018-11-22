@@ -1,2 +1,1 @@
-include README.md
-include githooks/data/commit.txt.j2
+include README.md LICENSE
