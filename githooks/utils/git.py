@@ -13,4 +13,10 @@ def get_repo_from_cwd():
 
 
 def get_branch_name(repo):
-    return repo.head.name.split('/')[-1]
+    head_name = repo.head.name.replace('refs/heads/', '')
+    return head_name.split('/')[-1]
+
+
+def get_branch_tag(repo):
+    head_name = repo.head.name.replace('refs/heads/', '')
+    return head_name.split('/')[-2]
