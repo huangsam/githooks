@@ -1,4 +1,4 @@
-import githooks.validation as v
+import githooks.utils.validation as v
 from githooks.constants import (
     MAX_LEN_SUBJECT,
     MAX_LEN_OTHER,
