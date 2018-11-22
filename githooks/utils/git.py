@@ -21,3 +21,8 @@ def get_branch_name():
     repo = _get_repo_from_cwd()
     head_name = repo.head.shorthand
     return head_name.split('/')[1]
+
+
+def is_master_checked_out():
+    repo = _get_repo_from_cwd()
+    return repo.branches.get('master').is_checked_out()
