@@ -6,3 +6,5 @@ tag = sys.argv[1]
 
 # Can be (message, merge, template)
 action = sys.argv[2]
+
+print(tag, action)
