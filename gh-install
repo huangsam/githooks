@@ -1,39 +1,53 @@
 #!/bin/bash
+set -eu
 
 BASE_DIR=$(git rev-parse --show-toplevel 2> /dev/null)
 
-if [ $? -ne 0 ] ; then
-    echo 'Not a git repository. Exiting now...'
-    exit 21
+PIP_URL='https://github.com/huangsam/githooks/tarball/master'
+
+echo 'Installing githooks package...'
+pip install -q "$PIP_URL"
+
+GIT_DIR="$BASE_DIR/.git"
+GITHOOK_DIR="$GIT_DIR/githooks"
+BUNDLE_DIR="$GITHOOK_DIR/bundle"
+
+if [ -d "$GITHOOK_DIR" ] ; then
+    echo "Wiping out old copy of $GITHOOK_DIR..."
+    rm -rf "$GITHOOK_DIR"
 else
-    echo 'Proceeding with git repository...'
+    echo "Creating new copy of $GITHOOK_DIR..."
 fi
-
-GITHOOK_DIR="${BASE_DIR}/.git/githooks"
-
-if [ -d "${GITHOOK_DIR}" ] ; then
-    echo "Wiping out old copy of ${GITHOOK_DIR}..."
-    rm -rf "${GITHOOK_DIR}"
-else
-    echo "Creating new copy of ${GITHOOK_DIR}..."
-fi
-
-rm -rf /tmp/huangsam-githooks*
 
 if [ ! -z "$(which unzip)" ] ; then
-    echo 'Starting unzip...'
+    echo 'Attempting unzip...'
     curl -fssL -o /tmp/master.zip https://github.com/huangsam/githooks/zipball/master
-    unzip -qo /tmp/master.zip -d /tmp && mv /tmp/huangsam-githooks* "${GITHOOK_DIR}"
+    unzip -qo /tmp/master.zip -d /tmp && mv /tmp/huangsam-githooks* "$GITHOOK_DIR"
 elif [ ! -z "$(which tar)" ] ; then
-    echo 'Starting tar...'
+    echo 'Attempting tar...'
     curl -fssL -o /tmp/master.tar.gz https://github.com/huangsam/githooks/tarball/master
-    tar -xf /tmp/master.tar.gz -C /tmp && mv /tmp/huangsam-githooks* "${GITHOOK_DIR}"
+    tar -xf /tmp/master.tar.gz -C /tmp && mv /tmp/huangsam-githooks* "$GITHOOK_DIR"
 elif [ ! -z "$(which git)" ] ; then
-    echo 'Starting git...'
-    git clone -q https://github.com/huangsam/githooks.git "${GITHOOK_DIR}"
+    echo 'Attempting git...'
+    git clone -q https://github.com/huangsam/githooks.git "$GITHOOK_DIR"
 else
     echo 'unzip, tar and git do not exist. Exiting now...'
     exit 22
 fi
+
+echo "Removing git metadata from $GITHOOK_DIR..."
+rm -rf "$GITHOOK_DIR/.git"
+
+pushd "$GIT_DIR" &> /dev/null
+echo 'Configuring hooks scripts...'
+for fl in $(find "$BUNDLE_DIR" -name '*.py'); do
+    chmod +x "$fl"
+    new_fl=${fl%.py}
+    mv "$fl" "$new_fl"
+done
+echo 'Installing hooks scripts...'
+rm -rf hooks
+ln -s "$BUNDLE_DIR" hooks
+popd &> /dev/null
 
 echo 'Installation successful. Exiting now...'
