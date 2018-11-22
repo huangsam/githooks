@@ -1,4 +1,4 @@
-# Introduction
+# githooks
 
 These hooks started out as a collection of policies that I enforced for
 Python projects at Cisco. Many of them execute the same verification tasks.
