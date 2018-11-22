@@ -14,6 +14,8 @@ GITHOOK_DIR="${BASE_DIR}/.githooks"
 if [ -d "${GITHOOK_DIR}" ] ; then
     echo "Wiping out old copy of ${GITHOOK_DIR}..."
     rm -rf "${GITHOOK_DIR}"
+else:
+    echo "Creating new copy of ${GITHOOK_DIR}..."
 fi
 
 rm -rf /tmp/huangsam-githooks*
