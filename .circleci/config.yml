@@ -1,0 +1,32 @@
+# Python CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-python/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      - image: 'circleci/python:3.7.0'
+
+    working_directory: ~/algorithms
+
+    steps:
+      - checkout
+
+      - run:
+          name: Set folder permissions
+          command: |
+            sudo chown -R circleci:circleci /usr/local/bin
+            sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
+
+      - run:
+          name: Install dependencies
+          command: pipenv install --system --dev
+
+      - run:
+          name: Validate formatting
+          command: flake8
+
+      - run:
+          name: Run tests
+          command: pytest
