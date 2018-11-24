@@ -1,10 +1,10 @@
 import os
 
-import git
+from git import Repo
 
 
 def _get_repo_from_cwd():
-    return git.Repo(os.getcwd(), search_parent_directories=True)
+    return Repo(os.getcwd(), search_parent_directories=True)
 
 
 def get_branch_tag():
