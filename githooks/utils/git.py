@@ -1,28 +1,24 @@
 import os
 
-from pygit2 import (
-    discover_repository,
-    Repository,
-)
+import git
 
 
 def _get_repo_from_cwd():
-    repository_path = discover_repository(os.getcwd())
-    return Repository(repository_path)
+    return git.Repo(os.getcwd(), search_parent_directories=True)
 
 
 def get_branch_tag():
     repo = _get_repo_from_cwd()
-    head_name = repo.head.shorthand
+    head_name = repo.active_branch.name
     return head_name.split('/')[0]
 
 
 def get_branch_name():
     repo = _get_repo_from_cwd()
-    head_name = repo.head.shorthand
+    head_name = repo.active_branch.name
     return head_name.split('/')[1]
 
 
 def is_master_checked_out():
     repo = _get_repo_from_cwd()
-    return repo.branches.get('master').is_checked_out()
+    return repo.active_branch.name == 'master'
