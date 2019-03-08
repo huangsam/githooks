@@ -14,13 +14,13 @@ def replace_with_tag(commit_fl):
     tag = get_branch_tag().upper()
     with fileinput.FileInput(commit_fl, inplace=True) as f:
         for line in f:
-            print(line.replace('COMMIT-TAG', tag), end='')
+            print(line.replace("COMMIT-TAG", tag), end="")
 
 
-if action == 'message':
+if action == "message":
     replace_with_tag(commit_fl)
-elif action == 'merge':
+elif action == "merge":
     check_no_conflict(commit_fl)
     replace_with_tag(commit_fl)
-elif action == 'template':
+elif action == "template":
     replace_with_tag(commit_fl)

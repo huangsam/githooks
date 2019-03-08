@@ -9,6 +9,10 @@ gitpython = "*"
 
 [dev-packages]
 pytest = "*"
+black = {version="*", markers="python_version >= '3.6'"}
 
 [requires]
 python_version = "3"
+
+[pipenv]
+allow_prereleases = true

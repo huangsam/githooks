@@ -13,12 +13,12 @@ def _get_branch_name():
 
 
 def get_branch_tag():
-    return _get_branch_name().split('/')[0]
+    return _get_branch_name().split("/")[0]
 
 
 def get_branch_title():
-    return _get_branch_name().split('/')[1]
+    return _get_branch_name().split("/")[1]
 
 
 def is_master_checked_out():
-    return _get_branch_name() == 'master'
+    return _get_branch_name() == "master"

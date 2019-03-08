@@ -3,8 +3,8 @@ def valid_len(line, max_len):
 
 
 def valid_kv(line):
-    return len(line.split(':')) == 2
+    return len(line.split(":")) == 2
 
 
 def valid_fixes(line):
-    return line.lower().startswith('fixes #')
+    return line.lower().startswith("fixes #")
