@@ -6,7 +6,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: 'circleci/python:3.7.2'
+      - image: 'circleci/python:3.7.5'
 
     working_directory: ~/githooks
 
@@ -17,7 +17,7 @@ jobs:
           name: Set folder permissions
           command: |
             sudo chown -R circleci:circleci /usr/local/bin
-            sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
+            sudo chown -R circleci:circleci /usr/local/lib/python3.*/site-packages
 
       - run:
           name: Install dependencies
