@@ -1,0 +1,4 @@
+gitpython
+black
+flake8
+pytest
