@@ -1,4 +1,4 @@
-gitpython
+GitPython==3.0.5
 black
 flake8
 pytest
