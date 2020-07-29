@@ -2,9 +2,10 @@
 
 [![CircleCI](https://circleci.com/gh/huangsam/githooks.svg?style=svg)](https://circleci.com/gh/huangsam/githooks)
 
-These hooks started out as a collection of policies that I enforced for
-Python projects at Cisco. Many of them execute the same verification tasks.
-As such, functionality is centralized into `githooks` package for reusability.
+These hooks started out as a collection of policies that I enforced for Python
+projects at [Cisco](https://www.cisco.com/). Many of them execute the
+same verification tasks. As such, functionality is centralized into `githooks`
+package for reusability.
 
 ## Development
 
