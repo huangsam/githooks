@@ -1,6 +1,7 @@
 # githooks
 
-[![CircleCI](https://circleci.com/gh/huangsam/githooks.svg?style=svg)](https://circleci.com/gh/huangsam/githooks)
+![](https://img.shields.io/circleci/build/github/huangsam/githooks)
+![](https://img.shields.io/github/license/huangsam/githooks)
 
 These hooks started out as a collection of policies that I enforced for Python
 projects at [Cisco](https://www.cisco.com/). Many of them execute the
