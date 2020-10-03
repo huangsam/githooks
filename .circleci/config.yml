@@ -1,28 +1,15 @@
-# Python CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-python/ for more details
-#
-version: 2
+version: 2.1
+
+orbs:
+  python: circleci/python@1.1.0
+
 jobs:
   build:
-    docker:
-      - image: 'circleci/python:3.8.5'
-
-    working_directory: ~/githooks
-
+    executor: python/default
     steps:
       - checkout
-
+      - python/install-packages:
+          pkg-manager: pip
       - run:
-          name: Set folder permissions
-          command: |
-            sudo chown -R circleci:circleci /usr/local/bin
-            sudo chown -R circleci:circleci /usr/local/lib/python3.*/site-packages
-
-      - run:
-          name: Install dependencies
-          command: python setup.py install
-
-      - run:
-          name: Run linting and tests
           command: python setup.py test
+          name: Test
