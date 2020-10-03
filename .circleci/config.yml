@@ -4,7 +4,7 @@ orbs:
   python: circleci/python@1.1.0
 
 jobs:
-  build:
+  build-and-test:
     executor: python/default
     steps:
       - checkout
@@ -13,3 +13,8 @@ jobs:
       - run:
           command: python setup.py test
           name: Test
+
+workflows:
+  main:
+    jobs:
+      - build-and-test
