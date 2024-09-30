@@ -9,3 +9,7 @@ def _repo() -> Repo:
 
 def branch_name() -> str:
     return _repo().active_branch.name
+
+
+def branch_tag() -> str:
+    return branch_name().split("/")[0]
