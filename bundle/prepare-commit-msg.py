@@ -13,8 +13,7 @@ try:
 except IndexError:
     source = None
 
-
-_content = """
+template = """
 [COMMIT-TAG] Enter summary in 50 characters or less
 
 # Enter explanatory text, if necessary. The maximum length of
@@ -27,11 +26,11 @@ _content = """
 # METADATA-LABEL: ID
 """.strip()
 
-
 if source is None:
-    tag = f"[{branch_tag().upper()}]"
-    _content = _content.replace("COMMIT-TAG", tag)
-    print(_content)
+    with open(commit_fl, "w") as f:
+        tag = branch_tag().upper()
+        content = template.replace("COMMIT-TAG", tag)
+        f.write(content)
 
 elif source == "merge":
     check_no_conflict(commit_fl)
