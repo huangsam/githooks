@@ -1,5 +1,5 @@
 import githooks.utils.validation as v
-from githooks.constants import LABEL_TO_TAG, MAX_LEN_OTHER, MAX_LEN_SUBJECT, OPTIONAL_TAGS, REQUIRED_TAGS
+from githooks.constants import LABEL_TO_TAG, MAX_LEN_OTHER, MAX_LEN_SUBJECT, OPTIONAL_TAGS, REQUIRED_TAGS, CommitTag
 
 
 class CommitMessageScanner:
@@ -47,7 +47,7 @@ class CommitMessageScanner:
                 invalid_tags.append(word)
         assert len(invalid_tags) == 0, "Invalid tags found"
         assert len(required_tags) == 1, "Please provide one required tag"
-        self.subject_tags = set(required_tags + optional_tags) - set(["!!!"])
+        self.subject_tags = set(required_tags + optional_tags) - set([CommitTag.MARKER])
 
     def scan_non_headers(self) -> None:
         for line in self.commit_lines:
@@ -66,5 +66,5 @@ class CommitMessageScanner:
             tags = LABEL_TO_TAG[label]
             label_tags.update(tags)
         valid_labels = self.subject_tags.issubset(label_tags)
-        valid_labels |= "[TASK]" in self.subject_tags and len(label_tags) == 0
+        valid_labels |= CommitTag.TASK in self.subject_tags and len(label_tags) == 0
         assert valid_labels, "Label tag(s) are invalid"

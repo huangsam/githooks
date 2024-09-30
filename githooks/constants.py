@@ -4,26 +4,53 @@ MAX_LEN_SUBJECT = 52
 # Max length of other lines
 MAX_LEN_OTHER = 72
 
+
+class CommitLabel:
+    BUG_CLOSE = "Closes-Bug"
+    BUG_PARTIAL = "Partial-Bug"
+    BUG_RELATED = "Related-Bug"
+    IMPACT_DOC = "DocImpact"
+    IMPACT_SECURITY = "SecurityImpact"
+    IMPACT_UPGRADE = "UpgradeImpact"
+    IMPLEMENTS = "Implements"
+
+
+class CommitTag:
+    API = "[API]"
+    BUGFIX = "[BUGFIX]"
+    CONFIG = "[CONF]"
+    DATABASE = "[DB]"
+    FEATURE = "[FEATURE]"
+    MARKER = "[!!!]"
+    SECURITY = "[SECURITY]"
+    TASK = "[TASK]"
+
+
+class TrunkBranch:
+    MASTER = "master"
+    MAIN = "main"
+
+
 # Label to tag mapping
 LABEL_TO_TAG = {
-    "Closes-Bug": set(["[BUGFIX]"]),
-    "DocImpact": set(["[SECURITY]", "[TASK]"]),
-    "Implements": set(["[FEATURE]", "[TASK]"]),
-    "Partial-Bug": set(["[BUGFIX]"]),
-    "Related-Bug": set(["[BUGFIX]", "[FEATURE]"]),
-    "SecurityImpact": set(["[SECURITY]"]),
-    "UpgradeImpact": set(),
+    CommitLabel.BUG_CLOSE: set([CommitTag.BUGFIX]),
+    CommitLabel.BUG_PARTIAL: set([CommitTag.BUGFIX]),
+    CommitLabel.BUG_RELATED: set([CommitTag.BUGFIX, CommitTag.FEATURE]),
+    CommitLabel.IMPACT_DOC: set([CommitTag.SECURITY, CommitTag.TASK]),
+    CommitLabel.IMPACT_SECURITY: set([CommitTag.SECURITY]),
+    CommitLabel.IMPACT_UPGRADE: set(),
+    CommitLabel.IMPLEMENTS: set([CommitTag.FEATURE, CommitTag.TASK]),
 }
 
 # Tags that apply to all labels
 for label in LABEL_TO_TAG.keys():
-    LABEL_TO_TAG[label].add("[API]")
-    LABEL_TO_TAG[label].add("[CONF]")
-    LABEL_TO_TAG[label].add("[DB]")
+    LABEL_TO_TAG[label].add(CommitTag.API)
+    LABEL_TO_TAG[label].add(CommitTag.CONFIG)
+    LABEL_TO_TAG[label].add(CommitTag.DATABASE)
 
 # Special tags
-REQUIRED_TAGS = set(["[BUGFIX]", "[TASK]", "[FEATURE]"])
-OPTIONAL_TAGS = set(["[!!!]", "[API]", "[CONF]", "[DB]", "[SECURITY]"])
+REQUIRED_TAGS = set([CommitTag.BUGFIX, CommitTag.TASK, CommitTag.FEATURE])
+OPTIONAL_TAGS = set([CommitTag.MARKER, CommitTag.API, CommitTag.CONFIG, CommitTag.DATABASE, CommitTag.SECURITY])
 
 # Trunk branches
-TRUNK_BRANCHES = {"master", "main"}
+TRUNK_BRANCHES = {TrunkBranch.MASTER, TrunkBranch.MAIN}
