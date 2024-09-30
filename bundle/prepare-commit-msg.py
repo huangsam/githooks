@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import fileinput
 import sys
 
 from githooks.core.branch import check_no_conflict
@@ -29,13 +28,10 @@ _content = """
 """.strip()
 
 
-def fill_with_template() -> None:
+if source is None:
     tag = f"[{branch_tag().upper()}]"
     _content = _content.replace("COMMIT-TAG", tag)
     print(_content)
 
-
-if source is None:
-    fill_with_template()
 elif source == "merge":
     check_no_conflict(commit_fl)
