@@ -1,5 +1,5 @@
-from githooks.scanner import CommitScanner
+from githooks.scanner import CommitMessageScanner
 
 
 def check_message(commit_fl: str) -> None:
-    CommitScanner(commit_fl).scan()
+    CommitMessageScanner(commit_fl).scan()

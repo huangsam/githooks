@@ -2,7 +2,13 @@ import githooks.utils.validation as v
 from githooks.constants import LABEL_TO_TAG, MAX_LEN_OTHER, MAX_LEN_SUBJECT, OPTIONAL_TAGS, REQUIRED_TAGS
 
 
-class CommitScanner:
+class CommitMessageScanner:
+    """Commit message scanner.
+
+    Scans for anomalies in the commit message and reports them back
+    to the caller via exceptions such as AssertionError and KeyError.
+    """
+
     def __init__(self, commit_flname: str) -> None:
         self.commit_flname = commit_flname
         self.commit_lines: list[str] = []
