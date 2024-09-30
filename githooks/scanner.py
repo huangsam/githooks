@@ -18,7 +18,6 @@ class CommitScanner:
         self.scan_labels()
 
     def scan_commit_lines(self) -> None:
-        """Scan contents from commit file."""
         with open(self.commit_flname, "r") as fl:
             for line in fl.readlines():
                 if not line.startswith("#"):
@@ -26,12 +25,10 @@ class CommitScanner:
         assert len(self.commit_lines) > 0, "Empty commit message"
 
     def scan_subject_line(self) -> None:
-        """Scan for subject line."""
         self.subject_line = self.commit_lines.pop(0)
         assert v.valid_len(self.subject_line, MAX_LEN_SUBJECT), "Subject line too long"
 
     def scan_subject_tags(self) -> None:
-        """Scan for subject tags."""
         invalid_tags = []
         required_tags = []
         optional_tags = []
@@ -47,14 +44,12 @@ class CommitScanner:
         self.subject_tags = set(required_tags + optional_tags) - set(["!!!"])
 
     def scan_non_headers(self) -> None:
-        """Analyze non-header lines."""
         for line in self.commit_lines:
             assert v.valid_len(line, MAX_LEN_OTHER), "Other lines are too long"
             if v.valid_kv(line) or v.valid_fixes(line):
                 self.non_headers.append(line)
 
     def scan_labels(self) -> None:
-        """Analyze metadata labels."""
         if "[TASK]" not in self.subject_tags:
             assert len(self.non_headers) > 0, "Required metadata tags"
         labels = map(lambda line: line.split(":")[0], self.non_headers)
