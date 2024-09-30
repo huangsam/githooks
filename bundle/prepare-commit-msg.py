@@ -21,11 +21,7 @@ def replace_with_tag(commit_fl: str) -> None:
         for line in f:
             print(line.replace("COMMIT-TAG", tag), end="")
 
-
-if source == "message":
-    replace_with_tag(commit_fl)
-elif source == "merge":
+if source == "merge":
     check_no_conflict(commit_fl)
-    replace_with_tag(commit_fl)
-elif source == "template":
-    replace_with_tag(commit_fl)
+
+replace_with_tag(commit_fl)
