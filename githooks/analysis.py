@@ -1,22 +1,9 @@
 import githooks.utils.validation as v
-from githooks.constants import (
-    MAX_LEN_SUBJECT,
-    MAX_LEN_OTHER,
-    LABEL_TO_TAG,
-    REQUIRED_TAGS,
-    OPTIONAL_TAGS,
-)
+from githooks.constants import LABEL_TO_TAG, MAX_LEN_OTHER, MAX_LEN_SUBJECT, OPTIONAL_TAGS, REQUIRED_TAGS
 
 
-def analyze_file(commit_flname):
-    """Analyze contents from commit file.
-
-    Args:
-        commit_flname (str): Name of commit file.
-
-    Returns:
-        list: Lines inside commit file.
-    """
+def analyze_file(commit_flname: str) -> list[str]:
+    """Analyze contents from commit file."""
     commit_buffer = []
     with open(commit_flname, "r") as fl:
         for line in fl.readlines():
@@ -26,18 +13,8 @@ def analyze_file(commit_flname):
     return commit_buffer
 
 
-def analyze_tags(subject_line):
-    """Analyze subject tags.
-
-    Args:
-        subject_line (str): Subject line contents.
-
-    Returns:
-        set: Required and optional tags.
-
-    Raises:
-        AssertionError: Invalid subject line or bad tags.
-    """
+def analyze_tags(subject_line: str) -> set[str]:
+    """Analyze subject tags."""
     assert v.valid_len(subject_line, MAX_LEN_SUBJECT), "Subject line too long"
     subject_words = subject_line.split()
     invalid_tags = []
@@ -55,18 +32,8 @@ def analyze_tags(subject_line):
     return set(required_tags + optional_tags) - set(["!!!"])
 
 
-def analyze_lines(commit_buffer):
-    """Analyze non-header lines.
-
-    Args:
-        commit_buffer (list): List of non-header lines in commit file.
-
-    Returns:
-        list: Last metadata lines.
-
-    Raises:
-        AssertionError: Poorly bounded lines in commit buffer.
-    """
+def analyze_lines(commit_buffer: list[str]) -> list[str]:
+    """Analyze non-header lines."""
     last_lines = []
     if len(commit_buffer) > 1:
         for line in commit_buffer:
@@ -76,17 +43,8 @@ def analyze_lines(commit_buffer):
     return last_lines
 
 
-def analyze_labels(subject_tags, last_lines):
-    """Analyze metadata labels.
-
-    Args:
-        subject_tags (list): Subject tags from subject line.
-        last_lines (list): Last metadata lines in commit file.
-
-    Raises:
-        KeyError: Invalid label(s).
-        AssertionError: Invalid label tag(s).
-    """
+def analyze_labels(subject_tags: set[str], last_lines: list[str]) -> None:
+    """Analyze metadata labels."""
     if "[TASK]" not in subject_tags:
         assert len(last_lines) > 0, "Required metadata tags"
     labels = map(lambda line: line.split(":")[0], last_lines)

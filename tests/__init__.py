@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 
-cur_path = os.path.dirname(os.path.realpath(__name__))
-fixt_path = os.path.join(cur_path, "tests", "fixtures")
+CURRENT_PATH = Path(__file__).parent.resolve()
+FIXTURE_PATH = CURRENT_PATH / "fixtures"

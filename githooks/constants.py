@@ -24,3 +24,6 @@ for label in LABEL_TO_TAG.keys():
 # Special tags
 REQUIRED_TAGS = set(["[BUGFIX]", "[TASK]", "[FEATURE]"])
 OPTIONAL_TAGS = set(["[!!!]", "[API]", "[CONF]", "[DB]", "[SECURITY]"])
+
+# Trunk branches
+TRUNK_BRANCHES = {"master", "main"}

@@ -1,9 +1,6 @@
-import os
-
 from githooks.core.message import check_message
-from tests import fixt_path
+from tests import FIXTURE_PATH
 
 
 def test_check_message():
-    commit_fl = os.path.join(fixt_path, "sample-commit.txt")
-    check_message(commit_fl)
+    check_message(FIXTURE_PATH / "sample-commit.txt")

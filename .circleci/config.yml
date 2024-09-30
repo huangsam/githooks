@@ -18,6 +18,9 @@ jobs:
           command: ruff check
           name: Lint
       - run:
+          command: mypy githooks
+          name: Type Check
+      - run:
           command: pytest
           name: Test
 
