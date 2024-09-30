@@ -15,7 +15,10 @@ jobs:
       - python/install-packages:
           pkg-manager: pip
       - run:
-          command: python setup.py test
+          command: ruff check
+          name: Lint
+      - run:
+          command: pytest
           name: Test
 
 workflows:
