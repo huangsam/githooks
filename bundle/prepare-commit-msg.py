@@ -7,7 +7,12 @@ from githooks.utils.git import branch_tag
 
 commit_fl: str = sys.argv[1]
 
-action: str = sys.argv[2]
+source: str | None
+
+try:
+    source = sys.argv[2]
+except IndexError:
+    source = None
 
 
 def replace_with_tag(commit_fl: str) -> None:
@@ -17,10 +22,10 @@ def replace_with_tag(commit_fl: str) -> None:
             print(line.replace("COMMIT-TAG", tag), end="")
 
 
-if action == "message":
+if source == "message":
     replace_with_tag(commit_fl)
-elif action == "merge":
+elif source == "merge":
     check_no_conflict(commit_fl)
     replace_with_tag(commit_fl)
-elif action == "template":
+elif source == "template":
     replace_with_tag(commit_fl)
