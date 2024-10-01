@@ -3,4 +3,3 @@ isort
 mypy
 pytest
 ruff
-black
