@@ -1,4 +1,4 @@
-# githooks
+# Git hooks for Python
 
 [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/huangsam/githooks/ci.yml)](https://github.com/huangsam/githooks/actions)
 [![License](https://img.shields.io/github/license/huangsam/githooks)](https://github.com/huangsam/githooks/blob/main/LICENSE)
