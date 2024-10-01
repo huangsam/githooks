@@ -10,7 +10,7 @@ class CommitMessageScanner:
     """
 
     def __init__(self, commit_flname: str) -> None:
-        self.commit_flname = commit_flname
+        self.commit_flname: str = commit_flname
         self.commit_lines: list[str] = []
         self.subject_line: str = ""
         self.subject_tags: set[str] = set()
