@@ -1,7 +1,7 @@
 # githooks
 
-[![](https://img.shields.io/circleci/build/github/huangsam/githooks)](https://circleci.com/gh/huangsam/githooks)
-[![](https://img.shields.io/github/license/huangsam/githooks)](https://github.com/huangsam/githooks/blob/master/LICENSE)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/huangsam/githooks/ci.yml)
+![License](https://img.shields.io/github/license/huangsam/githooks)
 
 These hooks started out as a collection of policies that I enforced for Python
 projects at [Cisco](https://www.cisco.com/). Many of them execute the
