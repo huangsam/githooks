@@ -44,13 +44,11 @@ LABEL_TO_TAG = {
 
 # Tags that apply to all labels
 for label in LABEL_TO_TAG.keys():
-    LABEL_TO_TAG[label].add(CommitTag.API)
-    LABEL_TO_TAG[label].add(CommitTag.CONFIG)
-    LABEL_TO_TAG[label].add(CommitTag.DATABASE)
+    LABEL_TO_TAG[label].update({CommitTag.API, CommitTag.CONFIG, CommitTag.DATABASE})
 
 # Special tags
-REQUIRED_TAGS = set([CommitTag.BUGFIX, CommitTag.TASK, CommitTag.FEATURE])
-OPTIONAL_TAGS = set([CommitTag.MARKER, CommitTag.API, CommitTag.CONFIG, CommitTag.DATABASE, CommitTag.SECURITY])
+REQUIRED_TAGS = {CommitTag.BUGFIX, CommitTag.TASK, CommitTag.FEATURE}
+OPTIONAL_TAGS = {CommitTag.MARKER, CommitTag.API, CommitTag.CONFIG, CommitTag.DATABASE, CommitTag.SECURITY}
 
 # Trunk branches
 TRUNK_BRANCHES = {TrunkBranch.MASTER, TrunkBranch.MAIN}
