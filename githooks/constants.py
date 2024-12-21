@@ -33,13 +33,13 @@ class TrunkBranch:
 
 # Label to tag mapping
 LABEL_TO_TAG = {
-    CommitLabel.BUG_CLOSE: set([CommitTag.BUGFIX]),
-    CommitLabel.BUG_PARTIAL: set([CommitTag.BUGFIX]),
-    CommitLabel.BUG_RELATED: set([CommitTag.BUGFIX, CommitTag.FEATURE]),
-    CommitLabel.IMPACT_DOC: set([CommitTag.SECURITY, CommitTag.TASK]),
-    CommitLabel.IMPACT_SECURITY: set([CommitTag.SECURITY]),
+    CommitLabel.BUG_CLOSE: {CommitTag.BUGFIX},
+    CommitLabel.BUG_PARTIAL: {CommitTag.BUGFIX},
+    CommitLabel.BUG_RELATED: {CommitTag.BUGFIX, CommitTag.FEATURE},
+    CommitLabel.IMPACT_DOC: {CommitTag.SECURITY, CommitTag.TASK},
+    CommitLabel.IMPACT_SECURITY: {CommitTag.SECURITY},
     CommitLabel.IMPACT_UPGRADE: set(),
-    CommitLabel.IMPLEMENTS: set([CommitTag.FEATURE, CommitTag.TASK]),
+    CommitLabel.IMPLEMENTS: {CommitTag.FEATURE, CommitTag.TASK},
 }
 
 # Tags that apply to all labels
