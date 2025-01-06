@@ -13,7 +13,7 @@ REQUIRES_PYTHON = ">=3.0.0"
 VERSION = None
 
 # What packages are required for this module to be executed?
-REQUIRED = ["flake8", "gitpython"]
+REQUIRED = ["gitpython"]
 SETUP_REQUIRED = ["pytest-runner"]
 TEST_REQUIRED = ["pytest"]
 
